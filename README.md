@@ -6,6 +6,9 @@ This code is aimed at Developers interested in using the Zamzar file conversion 
 
 This code is licensed under the [MIT License](License) - we encourage you to take this code and develop on top of it.
 
+Check it:
+
+![Zamzar Dropbox converter](images/zamzar-dropbox-converter.gif)
 
 ## Assumptions
 
@@ -49,6 +52,10 @@ For the program to access a users Dropbox account, a Dropbox app is needed. To c
 6. Change the `Dropbox_App_Key` string to the app key shown in your app dashboard.
 7. Change the `Dropbox_App_Secret` string to the app secret shown in your app dashboard.
 
+Your app in Dropbox should look like something like this:
+
+![Dropbox - Create App](images/dropbox-create-app.png)
+
 ### Obtain a Zamzar API key
 
 This program uses the [Zamzar file conversion API](https://developers.zamzar.com/) to perform file conversions. Because of this, a Zamzar account and API key are required to use it. To get an API key:
@@ -71,6 +78,12 @@ This file contains:
 * The access key used by the program to access the users Dropbox app folder.
 * A list of all supported file types by Zamzar, and what the user wishes them to be converted to.
 
+### Copy the config file
+
+Make sure you copy the `dropbox_file_converter_config.json` file **to the same directory as your program executable**, otherwise you will receive a `"Config file not found!"` error.
+
+When running in Visual Studio copy `dropbox_file_converter_config.json` to `ROOT_DIR\src\Dropbox File Converter\bin\Debug`
+
 ### Edit the config file
 
 You should modify fields in `dropbox_file_converter_config.json` to make the program perform the conversions you require. For example, the following snippet:
@@ -83,15 +96,11 @@ Can be changed to:
     
 This change will make the program convert any png image in the "To Convert"" folder in Dropbox into a jpg image, which is then stored in the "Converted" Folder in Dropbox.
 
-### Copy the config file
-
-Make sure you copy the `dropbox_file_converter_config.json` file **to the same directory as your program executable**, otherwise you will receive a `"Config file not found!"` error.
-
-When running in Visual Studio copy `dropbox_file_converter_config.json` to `ROOT_DIR\src\Dropbox File Converter\bin\Debug`
-
 ## Running the program
 
 To run the program, simply click the green arrow button labelled 'Start' on the toolbar in visual studio, or press f5.
+
+![Visual Studio - Start](images/visual-studio-start.png)
 
 The program should open in a console window, but doesn't always open in the foreground. You may need to click the icon for it in your taskbar for the console window to appear.
 
