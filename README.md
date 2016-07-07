@@ -1,6 +1,6 @@
 # Zamzar Dropbox Converter
 
-A sample C# app which uses the [Zamzar Developer API](https://developers.zamzar.com/) to automatically convert files in a specific Dropbox folder (named **To Convert**) into different formats. Converted files are placed in Dropbox in an output folder named **Converted**. A simple JSON file is used to manage file conversion preferences.
+A sample C# app which uses the [Zamzar Developer API](https://developers.zamzar.com/) to automatically convert files in a specific Dropbox folder (named **"To Convert"**) into different formats. Converted files are placed in Dropbox in an output folder named **"Converted"**. A simple JSON file (`dropbox_file_converter_config.json`) is used to manage file conversion preferences (i.e. what formats to convert from and to).
 
 This code is aimed at Developers interested in using the Zamzar file conversion API with Dropbox. If you find any issues please raise them against this repository, since it is monitored by the Zamzar development team. We welcome pull requests, forks and suggestions for improvements. 
 
@@ -64,16 +64,16 @@ This program uses the [Zamzar file conversion API](https://developers.zamzar.com
 
 ## Configuration
 
-To tell Dropbox what files we wish to convert to what formats we use a configuration file called `bin\Debug\Config.JSON`, which can be edited to your needs.
+To tell Dropbox what files we wish to convert to what formats we use a configuration file called `dropbox_file_converter_config.json` , which can be edited to your needs.
 
 This file contains:
 
 * The access key used by the program to access the users Dropbox app folder.
 * A list of all supported file types by Zamzar, and what the user wishes them to be converted to.
 
-### Editing the config file
+### Edit the config file
 
-You should modify fields in `Config.JSON` to make the program perform the conversions you require. For example, the following snippet:
+You should modify fields in `dropbox_file_converter_config.json` to make the program perform the conversions you require. For example, the following snippet:
 
     "png":"png",
 
@@ -83,6 +83,12 @@ Can be changed to:
     
 This change will make the program convert any png image in the "To Convert"" folder in Dropbox into a jpg image, which is then stored in the "Converted" Folder in Dropbox.
 
+### Copy the config file
+
+Make sure you copy the `dropbox_file_converter_config.json` file **to the same directory as your program executable**, otherwise you will receive a `"Config file not found!"` error.
+
+When running in Visual Studio copy `dropbox_file_converter_config.json` to `ROOT_DIR\src\Dropbox File Converter\bin\Debug`
+
 ## Running the program
 
 To run the program, simply click the green arrow button labelled 'Start' on the toolbar in visual studio, or press f5.
@@ -91,7 +97,7 @@ The program should open in a console window, but doesn't always open in the fore
 
 ### Obtaining an access key
 
-When the program is run for the first time, a webpage will be opened up in the users default browser, requesting that they log into Dropbox to authorise the app. If the user allows this app, then they will be provided with a code that they can paste back into the program console window, which will allow the program to access the users Dropbox. This access key is then saved to the 'Config.JSON' file for later use, so the program does not have to repeat the first step in future.
+When the program is run for the first time, a webpage will be opened up in the users default browser, requesting that they log into Dropbox to authorise the app. If the user allows this app, then they will be provided with a code that they can paste back into the program console window, which will allow the program to access the users Dropbox. This access key is then saved to the 'dropbox_file_converter_config.json' file for later use, so the program does not have to repeat the first step in future.
 
 ### Performing file conversions
 

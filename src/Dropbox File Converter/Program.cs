@@ -200,7 +200,7 @@ namespace Dropbox_File_Converter
 
             try
             {
-                config = JsonValue.Parse(File.ReadAllText("Config.JSON"));
+                config = JsonValue.Parse(File.ReadAllText("dropbox_file_converter_config.json"));
                 Console.WriteLine("Config file fetched!\n");
             }
             catch (FileNotFoundException)
@@ -294,4 +294,4 @@ namespace Dropbox_File_Converter
             }
         }
     }
-}
+}

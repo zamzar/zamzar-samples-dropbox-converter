@@ -37,7 +37,7 @@ namespace Dropbox_File_Converter
         }
 
         /// <summary>
-        /// Attempts to connect to a users dropbox. First, the config.json file will be checked for an access key which will be used to attempt to gain access to a users Dropbox. If this fails for whatever reason, then the user will go through Dropbox's OAuth2 procedure for obtaining an access key.
+        /// Attempts to connect to a users dropbox. First, the dropbox_file_converter_config.json file will be checked for an access key which will be used to attempt to gain access to a users Dropbox. If this fails for whatever reason, then the user will go through Dropbox's OAuth2 procedure for obtaining an access key.
         /// </summary>
         public void ConnectToDropbox(ref JsonValue config)
         {
@@ -94,7 +94,7 @@ namespace Dropbox_File_Converter
 
                         //Save the new access key to the config JSON, format it to make it more human readable, and save it back to the app's root
                         config["access_key"] = getAccessKeyTask.Result.AccessToken.ToString();
-                        File.WriteAllText("Config.JSON", config.ToString().Replace("{", "{" + Environment.NewLine).Replace(",", "," + Environment.NewLine));
+                        File.WriteAllText("dropbox_file_converter_config.json", config.ToString().Replace("{", "{" + Environment.NewLine).Replace(",", "," + Environment.NewLine));
                     }
                 }
                 catch
