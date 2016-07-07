@@ -103,7 +103,9 @@ When the program is run for the first time, a webpage will be opened up in the u
 
 When the user has obtained an access key and the program has gained access to their Dropbox account, the program will create a folder for itself in the users 'Apps' folder in Dropbox. The program will then create 3 sub-folders of this new folder.
 
-**To Convert** - Every file placed in this folder will be detected by the program, which will then attempt to convert it into the target format that the user has specified in the `Config.JSON` file.
+**To Convert** - Every file placed in this folder will be detected by the program, which will then attempt to convert it into the target format that the user has specified in the `dropbox_file_converter_config.json` file.
+
+**WARNING: All files placed in this folder WILL BE DELETED after they have been converted, so make sure you have another copy of the original somwhere else !**
 
 **Converted** - When a file conversion has been performed successfully, the resultant file will be placed into this folder. If more than one file is produced (e.g converting a Powerpoint presentation into a series of JPG files), a sub-folder will be created in this folder instead, and all converted files will be placed inside it.
 
