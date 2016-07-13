@@ -1,4 +1,4 @@
-# Zamzar Dropbox Converter
+# Dropbox Converter
 
 A sample C# app which uses the [Zamzar Developer API](https://developers.zamzar.com/) to automatically convert files in a specific Dropbox folder (named **"To Convert"**) into different formats. Converted files are placed in Dropbox in an output folder named **"Converted"**. A simple JSON file (`dropbox_file_converter_config.json`) is used to manage file conversion preferences (i.e. what formats to convert from and to).
 
