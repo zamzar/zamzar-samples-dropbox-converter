@@ -11,13 +11,10 @@ namespace Dropbox_File_Converter
     class Program
     {
         /// <summary>
-        /// Zamzar API key.
-        /// </summary>
-        static string zamzarAPIKey = "Zamzar_API_Key";                                              //Visit https://developers.zamzar.com/pricing or read the README for more information on obtaining an API key
-        /// <summary>
         /// DropboxRelay instance, which will be responsible for all communication between the client and Dropbox's servers
         /// </summary>
-        static DropboxRelay relay = new DropboxRelay("Dropbox_App_Key", "Dropbox_App_Secret");      //Visit https://www.dropbox.com/developers/apps or read the README for more information on obtaining your app key and secret     
+        static DropboxRelay relay;
+        //Visit https://www.dropbox.com/developers/apps or read the README for more information on obtaining your app key and secret
         /// <summary>
         /// Json Value that will contain data from the local config file.
         /// </summary>
@@ -43,10 +40,10 @@ namespace Dropbox_File_Converter
             {
                 //Check if a file is in the 'toConvert' folder in the users dropbox, getting the files name and extension if it exists
                 Console.WriteLine("Searching for files...");
-                var getFileTask = Task.Run(relay.GetFileToConvert);
+                Task<string> getFileTask = Task.Run((Func<Task<string>>) relay.GetFileToConvert);
                 getFileTask.Wait();
                 string fullPath = getFileTask.Result;
-                string[] splitPath = fullPath.Split('.');              
+                string[] splitPath = fullPath.Split('.');
 
                 //If a file was found, convert it and upload it to the converted folder
                 if (fullPath != string.Empty)
@@ -72,7 +69,7 @@ namespace Dropbox_File_Converter
                         //Check if the source and target formats in the config JSON are the same, which would make a conversion unnecessary
                         if ((string)config["conversions"][extension] == extension)
                         {
-                            Console.WriteLine("Target format is same as source format in config JSON, no conversion necessary.");                            
+                            Console.WriteLine("Target format is same as source format in config JSON, no conversion necessary.");
                         }
                         else
                         {
@@ -111,10 +108,10 @@ namespace Dropbox_File_Converter
 
                 //Sleep for 3 seconds before clearing the console and checking for more files
                 System.Threading.Thread.Sleep(3000);
-                Console.Clear();                
+                Console.Clear();
             }
         }
-        
+
         /// <summary>
         /// Uploads a file to zamzar's servers for conversion, given a target format, then gets each resultant file and uploads to the users dropbox
         /// </summary>
@@ -205,7 +202,7 @@ namespace Dropbox_File_Converter
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine("Config file not found! Program will now close.");
+                Console.WriteLine("Config file (dropbox_file_converter_config.json) not found! Program will now close.");
                 Console.ReadLine();
                 Environment.Exit(0);
             }
@@ -215,7 +212,24 @@ namespace Dropbox_File_Converter
                 Console.ReadLine();
                 Environment.Exit(0);
             }
-        } 
+
+            // validate config
+            if (!config.ContainsKey("access_key")
+                    || !config.ContainsKey("zamzar_api_key")
+                    || !config.ContainsKey("dropbox_api_key")
+                    || !config.ContainsKey("dropbox_api_secret")) {
+                Console.WriteLine("The config file didn't have one or more of the required keys:\n"
+                        + "    \"access_key\"\n"
+                        + "    \"zamzar_api_key\"\n"
+                        + "    \"dropbox_api_key\"\n"
+                        + "    \"dropbox_api_secret\"\n"
+                        + "Program will now close");
+                Console.ReadLine();
+                Environment.Exit(0);
+            }
+
+            relay = new DropboxRelay((string) config["dropbox_api_key"], (string) config["dropbox_api_secret"]);
+        }
 
         /// <summary>
         /// Gets a list of all the possible conversion types for a provided extension from the Zamzar servers.
@@ -224,7 +238,7 @@ namespace Dropbox_File_Converter
         /// <returns>A JsonValue containing a list of all possible formats that the passed in format can be converted to.</returns>
         static async Task<JsonValue> GetPossibleConversions(string url)
         {
-            using (HttpClientHandler handler = new HttpClientHandler { Credentials = new NetworkCredential(zamzarAPIKey, "") })
+            using (HttpClientHandler handler = new HttpClientHandler { Credentials = new NetworkCredential((string) config["zamzar_api_key"], "") })
             using (HttpClient client = new HttpClient(handler))
             using (HttpResponseMessage response = await client.GetAsync(url))
             using (HttpContent content = response.Content)
@@ -244,7 +258,7 @@ namespace Dropbox_File_Converter
         /// <returns></returns>
         static async Task<JsonValue> UploadToConvert(string url, string name, byte[] sourceData, string targetFormat)
         {
-            using (HttpClientHandler handler = new HttpClientHandler { Credentials = new NetworkCredential(zamzarAPIKey, "") })
+            using (HttpClientHandler handler = new HttpClientHandler { Credentials = new NetworkCredential((string) config["zamzar_api_key"], "") })
             using (HttpClient client = new HttpClient(handler))
             {
                 var request = new MultipartFormDataContent();
@@ -266,7 +280,7 @@ namespace Dropbox_File_Converter
         /// <returns>Returned JSON value, containing the status of the conversion job, and the file ID's of any converted files.</returns>
         static async Task<JsonValue> CheckIfFinished(string url)
         {
-            using (HttpClientHandler handler = new HttpClientHandler { Credentials = new NetworkCredential(zamzarAPIKey, "") })
+            using (HttpClientHandler handler = new HttpClientHandler { Credentials = new NetworkCredential((string) config["zamzar_api_key"], "") })
             using (HttpClient client = new HttpClient(handler))
             using (HttpResponseMessage response = await client.GetAsync(url))
             using (HttpContent content = response.Content)
@@ -284,7 +298,7 @@ namespace Dropbox_File_Converter
         static async Task<Stream> DownloadConvertedFile(string url)
         {
             //Can't use 'using' keyword in this method, as the returned stream was being closed automatically when the HttpContent was disposed - will be garbage collected instead
-            HttpClientHandler handler = new HttpClientHandler { Credentials = new NetworkCredential(zamzarAPIKey, "") };
+            HttpClientHandler handler = new HttpClientHandler { Credentials = new NetworkCredential((string) config["zamzar_api_key"], "") };
             HttpClient client = new HttpClient(handler);
             HttpResponseMessage response = await client.GetAsync(url);
             HttpContent content = response.Content;

@@ -58,7 +58,7 @@ namespace Dropbox_File_Converter
                         dbx = new DropboxClient(accessKey);
 
                         //Check if the previously established connection is valid by making a small request of the users account name
-                        var getAccount = Task.Run(dbx.Users.GetCurrentAccountAsync);
+                        var getAccount = Task.Run((Func<Task<Dropbox.Api.Users.FullAccount>>) dbx.Users.GetCurrentAccountAsync);
                         getAccount.Wait();
                         Console.WriteLine("Dropbox connection established. Connected as {0}!\n", getAccount.Result.Name.DisplayName);
                         connected = true;
