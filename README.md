@@ -45,12 +45,7 @@ For the program to access a users Dropbox account, a Dropbox app is needed. To c
 2. Choose 'Dropbox API' as the API.
 3. Choose 'App Folder' as the type of access.
 4. Name your app whatever you wish and click the create button. You should be taken to your new app dashboard. It should be noted that app names are unique across all accounts, so your app name should be something specific to you.
-5. Now open the source code for the program in 'Program.cs'. Near the beginning of the file, on line 20, you should see the following:
-
-        static DropboxRelay relay = new DropboxRelay("Dropbox_App_Key", "Dropbox_App_Secret")
-        
-6. Change the `Dropbox_App_Key` string to the app key shown in your app dashboard.
-7. Change the `Dropbox_App_Secret` string to the app secret shown in your app dashboard.
+5. Note down the Dropbox app key and secret, as you'll need these shortly.
 
 Your app in Dropbox should look like something like this:
 
@@ -64,10 +59,7 @@ This program uses the [Zamzar file conversion API](https://developers.zamzar.com
 2. Choose whatever plan fulfills your needs and click the corresponding 'Sign Up' button.
 3. Fill in your credentials, agree to the terms & privacy policy, and click the continue button.
 4. You will now be taken to your account dashboard, where you can see your plan and API Key.
-5. Copy the API key from your account dashboard.
-6. Now open the source code for the program in **Program.cs**
-7. Change the `zamzarAPIKey` static string to the API key from your account dashboard.
-
+5. Not down the Zamzar API key from your account dashboard, as you'll need this shortly.
 
 ## Configuration
 
@@ -75,7 +67,9 @@ To tell Dropbox what files we wish to convert to what formats we use a configura
 
 This file contains:
 
-* The access key used by the program to access the users Dropbox app folder.
+* A Dropbox app key and secret, which you obtained when setting up your Dropbox app.
+* A Zamzar API key, which you obtained when signing up for a Zamzar API account.
+* The access key used by the program to access the user's Dropbox app folder.
 * A list of all supported file types by Zamzar, and what the user wishes them to be converted to.
 
 ### Copy the config file
@@ -86,7 +80,15 @@ When running in Visual Studio copy `dropbox_file_converter_config.json` to `ROOT
 
 ### Edit the config file
 
-You should modify fields in `dropbox_file_converter_config.json` to make the program perform the conversions you require. For example, the following snippet:
+You should modify fields in `dropbox_file_converter_config.json`. First, add the necessary fields for access to the Dropbox and Zamzar APIs:
+
+```
+    "zamzar_api_key" : "yourZamzarApiKey",
+    "dropbox_api_key" : "yourDropboxAppKey",
+    "dropbox_api_secret" : "yourDropboxSecret",
+```
+
+Next, update the config to make the program perform the conversions you require. For example, the following snippet:
 
     "png":"png",
 
